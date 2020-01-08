@@ -42,10 +42,16 @@ bool Downloader::download() {
                 throw ("Can't open file");
             }
 
+            if(getQuery.empty())
+                url = url + "?" + getQuery;
+
             curl_easy_setopt(curl, CURLOPT_URL, this->url.c_str());
             curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, this->write_data);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, this);
+
+            if(postQuery.empty())
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postQuery.c_str());
             curlErrCode = curl_easy_perform(curl);
 
             if (curlErrCode != 0) {
@@ -148,4 +154,26 @@ bool Downloader::existNewerVersion(time_t fileTime) {
 
 size_t Downloader::fake_write_data(void *ptr, size_t size, size_t nmemb, void *stream) {
     return size * nmemb;
+}
+
+void Downloader::getAdd(string param, string value) {
+    if(getQuery.size() > 0){
+        getQuery += '&';
+    }
+    getQuery = getQuery + param + "=" + value;
+}
+
+void Downloader::postAdd(string param, string value) {
+    if(postQuery.size() > 0){
+        postQuery += '&';
+    }
+    postQuery = postQuery + param + "=" + value;
+}
+
+void Downloader::getClear() {
+    getQuery = "";
+}
+
+void Downloader::postClear() {
+    postQuery = "";
 }

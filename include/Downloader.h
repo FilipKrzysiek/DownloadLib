@@ -39,6 +39,26 @@ public:
      */
     void setEndOnError(bool end);
     /**
+     * @brief Adding data to get query
+     * @param param parameter
+     * @param value value of parameter
+     */
+    void getAdd(string param, string value);
+    /**
+     * @brief Clear get query
+     */
+    void getClear();
+    /**
+     * @brief Adding data to post query
+     * @param param parameter
+     * @param value value of parameter
+     */
+    void postAdd(string param, string value);
+    /**
+     * @brief Clear post query
+     */
+    void postClear();
+    /**
      * @brief Doenload file
      * @return 1 - download succesfully; 0 - error on download
      */
@@ -58,6 +78,8 @@ public:
 private:
     string url = "";
     string savePath = "";
+    string getQuery = "";
+    string postQuery = "";
     CURLcode curlErrCode;
     bool endOnError = false;
     static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream);

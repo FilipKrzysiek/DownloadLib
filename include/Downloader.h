@@ -75,6 +75,11 @@ public:
      * @return
      */
     string getCurlErrorString();
+    /**
+     * @brief Returning full url with get
+     * @return
+     */
+    string getFullUrl();
 private:
     string url = "";
     string savePath = "";

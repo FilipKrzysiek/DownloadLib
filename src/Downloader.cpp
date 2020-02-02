@@ -42,7 +42,7 @@ bool Downloader::download() {
                 throw ("Can't open file");
             }
 
-            if(getQuery.empty())
+            if(!getQuery.empty())
                 url = url + "?" + getQuery;
 
             curl_easy_setopt(curl, CURLOPT_URL, this->url.c_str());
@@ -176,4 +176,11 @@ void Downloader::getClear() {
 
 void Downloader::postClear() {
     postQuery = "";
+}
+
+string Downloader::getFullUrl() {
+    if(!getQuery.empty())
+        return url + "?" + getQuery;
+    else
+        return url;
 }

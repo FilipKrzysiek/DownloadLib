@@ -51,10 +51,10 @@ bool Downloader::download() {
             curlErrCode = curl_easy_perform(curl);
 
             if (curlErrCode != 0) {
+                curl_easy_cleanup(curl);
                 if (endOnError) {
                     throw Exception("Error Curl " + to_string(curlErrCode));
                 } else {
-                    curl_easy_cleanup(curl);
                     dfstream.close();
                     return false;
                 }

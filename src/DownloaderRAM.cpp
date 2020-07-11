@@ -39,13 +39,23 @@ bool DownloaderRAM::downloadToRam() {
 
             if(postQuery.empty())
                 curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postQuery.c_str());
-            curlErrCode = curl_easy_perform(curl);
+
+            try {
+                curlErrCode = curl_easy_perform(curl);
+            } catch (Exception& exp) {
+                curl_easy_cleanup(curl);
+                if(endOnError) {
+                    throw Exception(exp.msg());
+                } else {
+                    return false;
+                }
+            }
 
             if (curlErrCode != 0) {
+                curl_easy_cleanup(curl);
                 if (endOnError) {
                     throw Exception("Error Curl " + to_string(curlErrCode));
                 } else {
-                    curl_easy_cleanup(curl);
                     return false;
                 }
             }
@@ -54,8 +64,6 @@ bool DownloaderRAM::downloadToRam() {
             curl_easy_cleanup(curl);
             return true;
         }
-
-
         curl_easy_cleanup(curl);
         return false;
     } else {

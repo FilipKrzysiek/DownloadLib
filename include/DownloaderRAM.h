@@ -41,6 +41,8 @@ public:
      * @brief Delete downloaded data (clear string stream)
      */
     void clearDownloadedData();
+
+    virtual ~DownloaderRAM();
 };
 
 

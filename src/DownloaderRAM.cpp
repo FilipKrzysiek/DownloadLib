@@ -27,6 +27,7 @@ stringstream * DownloaderRAM::getDownloadedData() {
 
 bool DownloaderRAM::downloadToRam() {
     if (this->checkPrepared()) {
+        clearDownloadedData();
         CURL *curl = curl_easy_init();
         if (curl) {
             if(!getQuery.empty())
@@ -86,4 +87,8 @@ void DownloaderRAM::writeDataFun(void *ptr, size_t size, size_t nmemb) {
         throw Exception("Trying download too big file. Max download file size was set to " +
         to_string(maxStreamSize / 1024 / 1024) + "MB");
     }
+}
+
+DownloaderRAM::~DownloaderRAM() {
+    clearDownloadedData();
 }

@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <fstream>
 #include <curl/curl.h>
 #include <sys/types.h>
@@ -43,7 +44,7 @@ public:
      * @param param parameter
      * @param value value of parameter
      */
-    void getAdd(string param, string value);
+    void getAdd(const string& param, const string& value);
     /**
      * @brief Clear get query
      */
@@ -53,13 +54,13 @@ public:
      * @param param parameter
      * @param value value of parameter
      */
-    void postAdd(string param, string value);
+    void postAdd(const string& param, const string& value);
     /**
      * @brief Clear post query
      */
     void postClear();
     /**
-     * @brief Doenload file
+     * @brief Download file
      * @return 1 - download succesfully; 0 - error on download
      */
     bool download();
@@ -75,23 +76,66 @@ public:
      * @return
      */
     string getCurlErrorString();
-private:
+    /**
+     * @brief Returning full url with get
+     * @return
+     */
+    string getFullUrl();
+protected:
     string url = "";
     string savePath = "";
     string getQuery = "";
     string postQuery = "";
     CURLcode curlErrCode;
     bool endOnError = false;
-    static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream);
-    ofstream dfstream;
 
+private:
+    ofstream dfstream;
     bool openDFile();
     bool reopenFile();
 
-    void writeDataFun(void *ptr, size_t size, size_t nmemb);
     bool checkPrepared();
 
+    static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream);
+
     static size_t fake_write_data(void *ptr, size_t size, size_t nmemb, void *stream);
+
+    void writeDataFun(void *ptr, size_t size, size_t nmemb);
+};
+
+class DownloaderRAM: public Downloader {
+private:
+    stringstream downloadedData;
+    unsigned maxStreamSize = 250 * 1024 * 1024;
+
+    int getDownloadedDataSize();
+    bool checkPrepared();
+
+    static size_t write_data(void *ptr, size_t size, size_t nmemb, void *f);
+
+    void writeDataFun(void *ptr, size_t size, size_t nmemb);
+
+public:
+    /**
+     * @brief Seting max downloaded file size if is downloaded to ram (stringstream)
+     * @param size size in MB, default 250MB
+     */
+    void setMaxDownloadedStreamSize(unsigned size);
+    /**
+     * @brief Download file to RAM (to stringStream)
+     * @return 1 - download succesfully; 0 - error on download
+     */
+    bool downloadToRam();
+    /**
+     * @brief Return downloaded data to RAM
+     * @return string with data
+     */
+    stringstream * getDownloadedData();
+
+    /**
+     * @brief Delete downloaded data (clear string stream)
+     */
+    void clearDownloadedData();
 };
 
 

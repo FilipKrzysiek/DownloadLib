@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <fstream>
 #include <curl/curl.h>
 #include <sys/types.h>
@@ -43,7 +44,7 @@ public:
      * @param param parameter
      * @param value value of parameter
      */
-    void getAdd(string param, string value);
+    void getAdd(const string& param, const string& value);
     /**
      * @brief Clear get query
      */
@@ -53,13 +54,13 @@ public:
      * @param param parameter
      * @param value value of parameter
      */
-    void postAdd(string param, string value);
+    void postAdd(const string& param, const string& value);
     /**
      * @brief Clear post query
      */
     void postClear();
     /**
-     * @brief Doenload file
+     * @brief Download file
      * @return 1 - download succesfully; 0 - error on download
      */
     bool download();
@@ -80,23 +81,26 @@ public:
      * @return
      */
     string getFullUrl();
-private:
+protected:
     string url = "";
     string savePath = "";
     string getQuery = "";
     string postQuery = "";
     CURLcode curlErrCode;
     bool endOnError = false;
-    static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream);
-    ofstream dfstream;
 
+private:
+    ofstream dfstream;
     bool openDFile();
     bool reopenFile();
 
-    void writeDataFun(void *ptr, size_t size, size_t nmemb);
     bool checkPrepared();
 
+    static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream);
+
     static size_t fake_write_data(void *ptr, size_t size, size_t nmemb, void *stream);
+
+    void writeDataFun(void *ptr, size_t size, size_t nmemb);
 };
 
 

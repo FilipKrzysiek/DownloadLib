@@ -5,13 +5,13 @@
 #include "../include/Downloader.h"
 
 Downloader::Downloader() {
-    this->endOnError = 1;
+    this->endOnError = true;
 }
 
 Downloader::Downloader(string url, string savePath) {
     this->url = url;
     this->savePath = savePath;
-    this->endOnError = 1;
+    this->endOnError = true;
 }
 
 void Downloader::setUrl(string url) {
@@ -27,10 +27,7 @@ void Downloader::setEndOnError(bool end) {
 }
 
 bool Downloader::checkPrepared() {
-    if (savePath == "" || url == "")
-        return false;
-
-    return true;
+    return !(savePath.empty() || url.empty());
 }
 
 bool Downloader::download() {
@@ -42,7 +39,7 @@ bool Downloader::download() {
                 throw ("Can't open file");
             }
 
-            if(!getQuery.empty())
+            if (!getQuery.empty())
                 url = url + "?" + getQuery;
 
             curl_easy_setopt(curl, CURLOPT_URL, this->url.c_str());
@@ -50,7 +47,7 @@ bool Downloader::download() {
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, this->write_data);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, this);
 
-            if(postQuery.empty())
+            if (postQuery.empty())
                 curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postQuery.c_str());
             curlErrCode = curl_easy_perform(curl);
 
@@ -110,7 +107,7 @@ bool Downloader::reopenFile() {
 }
 
 string Downloader::getCurlErrorString() {
-    if(curlErrCode == 0)
+    if (curlErrCode == 0)
         return "OK";
     return curl_easy_strerror(curlErrCode);
 }
@@ -136,18 +133,14 @@ bool Downloader::existNewerVersion(time_t fileTime) {
                     //cleaning
                     curl_easy_cleanup(curl);
 
-                    if (fileTime > tServerFile)
-                        return false;
-                    else
-                        return true;
+                    return fileTime <= tServerFile;
                 }
             }
         }
         //Cleaning
         curl_easy_cleanup(curl);
         return false;
-    }
-    else{
+    } else {
         return false;
     }
 }
@@ -156,15 +149,15 @@ size_t Downloader::fake_write_data(void *ptr, size_t size, size_t nmemb, void *s
     return size * nmemb;
 }
 
-void Downloader::getAdd(string param, string value) {
-    if(getQuery.size() > 0){
+void Downloader::getAdd(const string &param, const string &value) {
+    if (!getQuery.empty()) {
         getQuery += '&';
     }
     getQuery = getQuery + param + "=" + value;
 }
 
-void Downloader::postAdd(string param, string value) {
-    if(postQuery.size() > 0){
+void Downloader::postAdd(const string &param, const string &value) {
+    if (!postQuery.empty()) {
         postQuery += '&';
     }
     postQuery = postQuery + param + "=" + value;
@@ -179,7 +172,7 @@ void Downloader::postClear() {
 }
 
 string Downloader::getFullUrl() {
-    if(!getQuery.empty())
+    if (!getQuery.empty())
         return url + "?" + getQuery;
     else
         return url;

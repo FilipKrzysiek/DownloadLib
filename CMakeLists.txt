@@ -8,7 +8,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/DownloadLib/resources)
 
 find_package(CURL REQUIRED)
 
-add_library(DownloaderLib STATIC src/Downloader.cpp include/Downloader.h)
+add_library(DownloaderLib STATIC src/Downloader.cpp include/Downloader.h src/DownloaderRAM.cpp include/DownloaderRAM.h)
 target_link_libraries(DownloaderLib stdc++fs)
 target_link_libraries(DownloaderLib ${CURL_LIBRARIES})
 

@@ -43,8 +43,7 @@ bool DownloaderRAM::downloadToRam() {
 
             if (curlErrCode != 0) {
                 if (endOnError) {
-                    cout << "Error curl!!" << endl;
-                    throw ("Error Curl " + to_string(curlErrCode)).c_str();
+                    throw Exception("Error Curl " + to_string(curlErrCode));
                 } else {
                     curl_easy_cleanup(curl);
                     return false;
@@ -76,7 +75,7 @@ void DownloaderRAM::writeDataFun(void *ptr, size_t size, size_t nmemb) {
     if (getDownloadedDataSize() < maxStreamSize) {
         downloadedData.write((char *) ptr, nbytes);
     } else {
-        throw ("Trying download too big file. Max download file size was set to " +
-        to_string(maxStreamSize / 1024 / 1024) + "MB").c_str();
+        throw Exception("Trying download too big file. Max download file size was set to " +
+        to_string(maxStreamSize / 1024 / 1024) + "MB");
     }
 }

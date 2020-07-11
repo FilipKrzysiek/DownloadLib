@@ -12,6 +12,7 @@
 #include <curl/curl.h>
 #include <sys/types.h>
 #include <experimental/filesystem>
+#include "../../Exception/Exception.h"
 
 using namespace std;
 

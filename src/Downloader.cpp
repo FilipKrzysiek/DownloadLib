@@ -35,8 +35,7 @@ bool Downloader::download() {
         CURL *curl = curl_easy_init();
         if (curl) {
             if (!this->openDFile()) {
-                cout << "Error file can't open!!" << endl;
-                throw ("Can't open file");
+                throw Exception("Can't open file");
             }
 
             if (!getQuery.empty())
@@ -53,8 +52,7 @@ bool Downloader::download() {
 
             if (curlErrCode != 0) {
                 if (endOnError) {
-                    cout << "Error curl!!" << endl;
-                    throw ("Error Curl " + to_string(curlErrCode)).c_str();
+                    throw Exception("Error Curl " + to_string(curlErrCode));
                 } else {
                     curl_easy_cleanup(curl);
                     dfstream.close();
@@ -90,7 +88,7 @@ void Downloader::writeDataFun(void *ptr, size_t size, size_t nmemb) {
         if (this->reopenFile()) {
             dfstream.write((char *) ptr, nbytes);
         } else {
-            throw "Can't open file";
+            throw Exception("Can't open file");
         }
     }
 }

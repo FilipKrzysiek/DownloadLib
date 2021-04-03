@@ -14,7 +14,9 @@ void DownloaderRAM::setMaxDownloadedStreamSize(unsigned int size) {
 
 int DownloaderRAM::getDownloadedDataSize() {
     downloadedData.seekg(0, ios::end);
-    return downloadedData.tellg();
+    int temp = downloadedData.tellg();
+    downloadedData.seekg(0, ios::beg);
+    return temp;
 }
 
 void DownloaderRAM::clearDownloadedData() {

@@ -81,6 +81,13 @@ public:
      * @return
      */
     string getFullUrl();
+
+    /**
+     * @brief Getting resonse code of last response
+     * @return Response code or -1 if nothing was called
+     */
+    long getResponseCode();
+
 protected:
     string url = "";
     string savePath = "";
@@ -89,6 +96,7 @@ protected:
     CURLcode curlErrCode;
     bool endOnError = false;
 
+    long responseCode = -1;
 private:
     ofstream dfstream;
     bool openDFile();
@@ -136,6 +144,8 @@ public:
      * @brief Delete downloaded data (clear string stream)
      */
     void clearDownloadedData();
+
+    virtual ~DownloaderRAM();
 };
 
 

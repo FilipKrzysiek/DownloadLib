@@ -28,6 +28,7 @@ stringstream * DownloaderRAM::getDownloadedData() {
 }
 
 bool DownloaderRAM::downloadToRam() {
+    responseCode = -1;
     if (this->checkPrepared()) {
         clearDownloadedData();
         CURL *curl = curl_easy_init();
@@ -45,6 +46,7 @@ bool DownloaderRAM::downloadToRam() {
 
             try {
                 curlErrCode = curl_easy_perform(curl);
+                curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &responseCode);
             } catch (Exception& exp) {
                 curl_easy_cleanup(curl);
                 if(endOnError) {

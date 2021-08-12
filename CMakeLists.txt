@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(DownloaderLib)
+project(DownloaderLib VERSION "0.9" LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/DownloadLib/resources)

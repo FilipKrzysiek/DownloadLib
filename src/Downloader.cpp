@@ -2,7 +2,7 @@
 // Created by cysiu on 08.08.2019.
 //
 
-#include "../include/Downloader.h"
+#include "Downloader.h"
 
 Downloader::Downloader() {
     this->endOnError = true;

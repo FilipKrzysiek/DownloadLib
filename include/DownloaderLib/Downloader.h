@@ -12,6 +12,7 @@
 #include <curl/curl.h>
 #include <sys/types.h>
 #include <experimental/filesystem>
+#include "Exception.h"
 
 using namespace std;
 
@@ -109,43 +110,6 @@ private:
     static size_t fake_write_data(void *ptr, size_t size, size_t nmemb, void *stream);
 
     void writeDataFun(void *ptr, size_t size, size_t nmemb);
-};
-
-class DownloaderRAM: public Downloader {
-private:
-    stringstream downloadedData;
-    unsigned maxStreamSize = 250 * 1024 * 1024;
-
-    int getDownloadedDataSize();
-    bool checkPrepared();
-
-    static size_t write_data(void *ptr, size_t size, size_t nmemb, void *f);
-
-    void writeDataFun(void *ptr, size_t size, size_t nmemb);
-
-public:
-    /**
-     * @brief Seting max downloaded file size if is downloaded to ram (stringstream)
-     * @param size size in MB, default 250MB
-     */
-    void setMaxDownloadedStreamSize(unsigned size);
-    /**
-     * @brief Download file to RAM (to stringStream)
-     * @return 1 - download succesfully; 0 - error on download
-     */
-    bool downloadToRam();
-    /**
-     * @brief Return downloaded data to RAM
-     * @return string with data
-     */
-    stringstream * getDownloadedData();
-
-    /**
-     * @brief Delete downloaded data (clear string stream)
-     */
-    void clearDownloadedData();
-
-    virtual ~DownloaderRAM();
 };
 
 

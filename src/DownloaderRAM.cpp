@@ -2,7 +2,7 @@
 // Created by krzysiu on 11.07.2020.
 //
 
-#include "../include/DownloaderRAM.h"
+#include "DownloaderRAM.h"
 
 bool DownloaderRAM::checkPrepared() {
     return !(url.empty());
